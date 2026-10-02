@@ -2,3 +2,4 @@
 __pycache__/
 *.sqlite3
 .envreport_service/report.pdf
+report_service/*.pdf
