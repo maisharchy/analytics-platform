@@ -1,0 +1,11 @@
+{
+  "title": "Q3 Performance Report",
+  "subtitle": "Generated automatically",
+  "kpis": [
+    {"label": "Total Records", "value": "12,480"},
+    {"label": "Avg Latency", "value": "42 ms"},
+    {"label": "Error Rate", "value": "0.8%"}
+  ],
+  "columns": ["Region", "Requests", "Errors"],
+  "rows": [["North", 5200, 31], ["South", 4100, 22], ["West", 3180, 47]]
+}

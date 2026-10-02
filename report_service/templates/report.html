@@ -1,0 +1,135 @@
+<!-- Tell the browser this is an HTML5 document -->
+<!doctype html>
+
+<!-- Start of the HTML document -->
+<html>
+
+<head>
+
+<!-- CSS that controls how the report looks -->
+<style>
+
+  /* Style the entire page */
+  body {
+    font-family: Helvetica, sans-serif; /* Choose the font */
+    margin: 40px;                       /* Add space around the page */
+    color: #222;                        /* Set the text color */
+  }
+
+  /* Style the main report title */
+  h1 {
+    color: #4b2a85;                     /* Make the title purple */
+    border-bottom: 3px solid #4b2a85;  /* Add a purple line underneath */
+    padding-bottom: 8px;                /* Add space between title and line */
+  }
+
+  /* Arrange the KPI boxes next to each other */
+  .kpis {
+    display: flex;       /* Put the boxes in a row */
+    gap: 20px;           /* Add space between the boxes */
+    margin: 24px 0;      /* Add space above and below the KPI section */
+  }
+
+  /* Style each individual KPI box */
+  .kpi {
+    background: #f3eefb; /* Light purple background */
+    padding: 16px;       /* Add space inside the box */
+    border-radius: 8px;  /* Make the corners rounded */
+    flex: 1;              /* Make each box take equal space */
+  }
+
+  /* Style the large KPI value */
+  .kpi b {
+    font-size: 24px;     /* Make the value larger */
+    display: block;      /* Put the value on its own line */
+  }
+
+  /* Style the entire table */
+  table {
+    width: 100%;          /* Make the table use the full page width */
+    border-collapse: collapse; /* Remove extra space between borders */
+  }
+
+  /* Style table headers and table cells */
+  th, td {
+    padding: 8px;                    /* Add space inside each cell */
+    border-bottom: 1px solid #ddd;  /* Add a line underneath each row */
+    text-align: left;                /* Align text to the left */
+  }
+
+  /* Style the table header */
+  th {
+    background: #4b2a85; /* Purple background */
+    color: white;        /* White text */
+  }
+
+</style>
+
+</head>
+
+<body>
+
+  <!-- Display the report title from the JSON data -->
+  <h1>{{ title }}</h1>
+
+  <!-- Display the report subtitle from the JSON data -->
+  <p>{{ subtitle }}</p>
+
+
+  <!-- Start the KPI section -->
+  <div class="kpis">
+
+    <!-- Loop through every KPI in the JSON data -->
+    {% for k in kpis %}
+
+    <!-- Display the KPI value and label -->
+    <div class="kpi">
+      <b>{{ k.value }}</b>
+      {{ k.label }}
+    </div>
+
+    <!-- End the KPI loop -->
+    {% endfor %}
+
+  </div>
+
+
+  <!-- Start the report table -->
+  <table>
+
+    <!-- Loop through the column names -->
+    <tr>
+      {% for h in columns %}
+
+      <!-- Create a table header for each column -->
+      <th>{{ h }}</th>
+
+      {% endfor %}
+    </tr>
+
+
+    <!-- Loop through every row of data -->
+    {% for row in rows %}
+
+    <!-- Start a new table row -->
+    <tr>
+
+      <!-- Loop through every cell in the current row -->
+      {% for cell in row %}
+
+      <!-- Display the cell's value -->
+      <td>{{ cell }}</td>
+
+      <!-- End the cell loop -->
+      {% endfor %}
+
+    </tr>
+
+    <!-- End the row loop -->
+    {% endfor %}
+
+  </table>
+
+</body>
+
+</html>
