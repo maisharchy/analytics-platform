@@ -1,10 +1,21 @@
 {
   "title": "Q3 Performance Report",
-  "subtitle": "Generated automatically",
+  "subtitle": "Platform health and regional breakdown",
   "kpis": [
     {"label": "Total Records", "value": "12,480"},
     {"label": "Avg Latency", "value": "42 ms"},
     {"label": "Error Rate", "value": "0.8%"}
+  ],
+  "insights": [
+    "West region has the highest error count despite the lowest traffic.",
+    "Average latency improved 12% over the week.",
+    "North carries 42% of all requests."
+  ],
+  "charts": [
+    {"type": "bar", "title": "Requests by Region",
+     "labels": ["North", "South", "West"], "values": [5200, 4100, 3180]},
+    {"type": "line", "title": "Daily Latency (ms)",
+     "labels": ["Mon", "Tue", "Wed", "Thu", "Fri"], "values": [48, 44, 41, 45, 42]}
   ],
   "columns": ["Region", "Requests", "Errors"],
   "rows": [["North", 5200, 31], ["South", 4100, 22], ["West", 3180, 47]]

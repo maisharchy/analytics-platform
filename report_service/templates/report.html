@@ -1,135 +1,501 @@
-<!-- Tell the browser this is an HTML5 document -->
 <!doctype html>
+<!-- Tell the browser/WeasyPrint this is an HTML5 document -->
 
-<!-- Start of the HTML document -->
 <html>
+<!-- Start of the HTML document -->
 
 <head>
+<!-- The head contains settings and CSS -->
 
-<!-- CSS that controls how the report looks -->
+<meta charset="utf-8">
+<!-- Tell HTML to use UTF-8 character encoding -->
+
 <style>
+/* Start of the CSS styling */
 
-  /* Style the entire page */
-  body {
-    font-family: Helvetica, sans-serif; /* Choose the font */
-    margin: 40px;                       /* Add space around the page */
-    color: #222;                        /* Set the text color */
+
+/* Control the PDF page itself */
+@page {
+
+  /* Use US Letter paper size */
+  size: Letter;
+
+  /* Set the page margins */
+  margin: 0.75in 0.75in 1in;
+
+  /* Put the report title in the bottom-left footer */
+  @bottom-left {
+    content: "{{ title }}";
+    font-size: 9pt;
+    color: #888;
   }
 
-  /* Style the main report title */
-  h1 {
-    color: #4b2a85;                     /* Make the title purple */
-    border-bottom: 3px solid #4b2a85;  /* Add a purple line underneath */
-    padding-bottom: 8px;                /* Add space between title and line */
+  /* Put the page number in the bottom-right footer */
+  @bottom-right {
+    content: "Page " counter(page) " of " counter(pages);
+    font-size: 9pt;
+    color: #888;
   }
+}
 
-  /* Arrange the KPI boxes next to each other */
-  .kpis {
-    display: flex;       /* Put the boxes in a row */
-    gap: 20px;           /* Add space between the boxes */
-    margin: 24px 0;      /* Add space above and below the KPI section */
-  }
 
-  /* Style each individual KPI box */
-  .kpi {
-    background: #f3eefb; /* Light purple background */
-    padding: 16px;       /* Add space inside the box */
-    border-radius: 8px;  /* Make the corners rounded */
-    flex: 1;              /* Make each box take equal space */
-  }
+/* Style the entire document */
+body {
 
-  /* Style the large KPI value */
-  .kpi b {
-    font-size: 24px;     /* Make the value larger */
-    display: block;      /* Put the value on its own line */
-  }
+  /* Use Helvetica first, then Arial if Helvetica isn't available */
+  font-family: Helvetica, Arial, sans-serif;
 
-  /* Style the entire table */
-  table {
-    width: 100%;          /* Make the table use the full page width */
-    border-collapse: collapse; /* Remove extra space between borders */
-  }
+  /* Set the main text color to dark gray */
+  color: #222;
 
-  /* Style table headers and table cells */
-  th, td {
-    padding: 8px;                    /* Add space inside each cell */
-    border-bottom: 1px solid #ddd;  /* Add a line underneath each row */
-    text-align: left;                /* Align text to the left */
-  }
+  /* Set the default text size */
+  font-size: 11pt;
+}
 
-  /* Style the table header */
-  th {
-    background: #4b2a85; /* Purple background */
-    color: white;        /* White text */
-  }
+
+/* Style the purple header at the top */
+.header {
+
+  /* Give the header a purple background */
+  background: #4b2a85;
+
+  /* Make the text white */
+  color: white;
+
+  /* Add space inside the header */
+  padding: 24px 28px;
+
+  /* Round the corners */
+  border-radius: 6px;
+}
+
+
+/* Style the main report title */
+.header h1 {
+
+  /* Remove the default heading margin */
+  margin: 0;
+
+  /* Make the title large */
+  font-size: 24pt;
+}
+
+
+/* Style the subtitle */
+.header p {
+
+  /* Add a little space above the subtitle */
+  margin: 6px 0 0;
+
+  /* Make the subtitle slightly transparent */
+  opacity: 0.85;
+}
+
+
+/* Style the generated-date text */
+.meta {
+
+  /* Make it gray */
+  color: #888;
+
+  /* Make it smaller */
+  font-size: 9pt;
+
+  /* Add space around it */
+  margin: 8px 0 20px;
+}
+
+
+/* Style section headings such as "Key Insights" */
+h2 {
+
+  /* Make section headings purple */
+  color: #4b2a85;
+
+  /* Set heading size */
+  font-size: 14pt;
+
+  /* Add space around the heading */
+  margin: 28px 0 10px;
+
+  /* Add a light purple line underneath */
+  border-bottom: 2px solid #e6dcf5;
+
+  /* Add a little space between the text and line */
+  padding-bottom: 4px;
+}
+
+
+/* Style the KPI table */
+table.kpis {
+
+  /* Make the table use the full available width */
+  width: 100%;
+
+  /* Add spacing between KPI boxes */
+  border-spacing: 12px 0;
+
+  /* Compensate for the table spacing */
+  margin: 0 -12px;
+}
+
+
+/* Style each individual KPI box */
+table.kpis td {
+
+  /* Give the KPI box a light purple background */
+  background: #f3eefb;
+
+  /* Add space inside the box */
+  padding: 16px;
+
+  /* Round the corners */
+  border-radius: 8px;
+
+  /* Each KPI takes about one-third of the width */
+  width: 33%;
+
+  /* Keep the content aligned at the top */
+  vertical-align: top;
+}
+
+
+/* Style the large KPI number */
+.kpi-value {
+
+  /* Make the value large */
+  font-size: 22pt;
+
+  /* Make it bold */
+  font-weight: bold;
+
+  /* Make it purple */
+  color: #4b2a85;
+
+  /* Put it on its own line */
+  display: block;
+}
+
+
+/* Style the KPI label */
+.kpi-label {
+
+  /* Make the label smaller */
+  font-size: 9pt;
+
+  /* Make the label gray */
+  color: #666;
+
+  /* Convert text to uppercase */
+  text-transform: uppercase;
+
+  /* Add a little spacing between letters */
+  letter-spacing: 0.5px;
+}
+
+
+/* Style the insights list */
+ul.insights {
+
+  /* Move the list slightly to the right */
+  padding-left: 18px;
+}
+
+
+/* Add space between each insight */
+ul.insights li {
+
+  /* Add 6 pixels below each item */
+  margin-bottom: 6px;
+}
+
+
+/* Style each chart container */
+.chart {
+
+  /* Try to prevent a chart from being split across pages */
+  page-break-inside: avoid;
+
+  /* Add space around the chart */
+  margin: 12px 0;
+}
+
+
+/* Make chart images use the available width */
+.chart img {
+
+  /* Make the image fill the chart container */
+  width: 100%;
+}
+
+
+/* Style the detailed-data table */
+table.data {
+
+  /* Make the table use the full available width */
+  width: 100%;
+
+  /* Remove spaces between table borders */
+  border-collapse: collapse;
+
+  /* Add a little space above the table */
+  margin-top: 8px;
+}
+
+
+/* Style the table header cells */
+table.data th {
+
+  /* Purple background */
+  background: #4b2a85;
+
+  /* White text */
+  color: white;
+
+  /* Add space inside the cells */
+  padding: 8px;
+
+  /* Align text to the left */
+  text-align: left;
+
+  /* Set header text size */
+  font-size: 10pt;
+}
+
+
+/* Style normal table cells */
+table.data td {
+
+  /* Add space inside the cells */
+  padding: 8px;
+
+  /* Add a light line below each row */
+  border-bottom: 1px solid #eee;
+
+  /* Set cell text size */
+  font-size: 10pt;
+}
+
+
+/* Give every other row a slightly different background */
+table.data tr:nth-child(even) td {
+
+  /* Light purple/gray background */
+  background: #faf8fd;
+}
 
 </style>
+<!-- End of CSS -->
 
 </head>
+<!-- End of head -->
+
 
 <body>
+<!-- Everything inside body appears in the PDF -->
 
-  <!-- Display the report title from the JSON data -->
+
+<!-- ================= HEADER ================= -->
+
+<div class="header">
+<!-- Purple header container -->
+
   <h1>{{ title }}</h1>
+  <!-- Jinja inserts the report title here -->
 
-  <!-- Display the report subtitle from the JSON data -->
   <p>{{ subtitle }}</p>
+  <!-- Jinja inserts the report subtitle here -->
+
+</div>
+<!-- End of header -->
 
 
-  <!-- Start the KPI section -->
-  <div class="kpis">
+<!-- ================= DATE ================= -->
 
-    <!-- Loop through every KPI in the JSON data -->
+<div class="meta">
+  Generated {{ generated }}
+</div>
+
+<!--
+Jinja replaces {{ generated }} with the date
+from app.py.
+
+For example:
+Generated October 02, 2026
+-->
+
+
+<!-- ================= KPIs ================= -->
+
+<table class="kpis">
+<!-- Start the KPI table -->
+
+<tr>
+<!-- Start a table row -->
+
     {% for k in kpis %}
+    <!--
+    Loop through every KPI in the JSON.
 
-    <!-- Display the KPI value and label -->
-    <div class="kpi">
-      <b>{{ k.value }}</b>
-      {{ k.label }}
-    </div>
+    For example:
+    kpis = [
+        {"label": "Total Records", "value": "12,480"},
+        {"label": "Avg Latency", "value": "42 ms"}
+    ]
+    -->
 
+    <td>
+    <!-- Create one KPI box -->
+
+      <span class="kpi-value">
+        {{ k.value }}
+      </span>
+      <!-- Display the KPI value -->
+
+      <span class="kpi-label">
+        {{ k.label }}
+      </span>
+      <!-- Display the KPI label -->
+
+    </td>
+    <!-- End this KPI box -->
+
+    {% endfor %}
     <!-- End the KPI loop -->
+
+</tr>
+<!-- End KPI row -->
+
+</table>
+<!-- End KPI table -->
+
+
+<!-- ================= INSIGHTS ================= -->
+
+{% if insights %}
+<!--
+Only show this section if insights exists
+and contains something.
+-->
+
+<h2>Key Insights</h2>
+<!-- Section heading -->
+
+<ul class="insights">
+<!-- Start the insights list -->
+
+    {% for i in insights %}
+    <!-- Loop through each insight -->
+
+    <li>{{ i }}</li>
+    <!-- Display the current insight -->
+
     {% endfor %}
+    <!-- End the insight loop -->
 
-  </div>
+</ul>
+<!-- End the list -->
 
-
-  <!-- Start the report table -->
-  <table>
-
-    <!-- Loop through the column names -->
-    <tr>
-      {% for h in columns %}
-
-      <!-- Create a table header for each column -->
-      <th>{{ h }}</th>
-
-      {% endfor %}
-    </tr>
+{% endif %}
+<!-- End the if statement -->
 
 
-    <!-- Loop through every row of data -->
-    {% for row in rows %}
+<!-- ================= CHARTS ================= -->
 
-    <!-- Start a new table row -->
-    <tr>
+{% if charts %}
+<!--
+Only show the chart section if charts exist.
+-->
 
-      <!-- Loop through every cell in the current row -->
-      {% for cell in row %}
+<h2>Trends</h2>
+<!-- Chart section heading -->
 
-      <!-- Display the cell's value -->
-      <td>{{ cell }}</td>
+{% for c in charts %}
+<!-- Loop through every generated chart -->
 
-      <!-- End the cell loop -->
-      {% endfor %}
+<div class="chart">
 
-    </tr>
+  <img
+    src="data:image/png;base64,{{ c.img }}"
+    alt="{{ c.title }}"
+  >
 
-    <!-- End the row loop -->
-    {% endfor %}
+  <!--
+  c.img contains the Base64 image generated
+  by charts.py.
 
-  </table>
+  "data:image/png;base64," tells the browser:
+  "This is a PNG image represented as Base64."
+
+  {{ c.img }} inserts the actual image data.
+
+  alt="{{ c.title }}" provides alternative text
+  using the chart title.
+  -->
+
+</div>
+
+{% endfor %}
+<!-- End chart loop -->
+
+{% endif %}
+<!-- End chart if statement -->
+
+
+<!-- ================= DETAILED DATA ================= -->
+
+<h2>Detailed Data</h2>
+<!-- Section heading -->
+
+
+<table class="data">
+<!-- Start the data table -->
+
+
+<tr>
+<!-- Start the header row -->
+
+{% for h in columns %}
+<!-- Loop through each column name -->
+
+<th>{{ h }}</th>
+<!-- Display the column name -->
+
+{% endfor %}
+<!-- End column loop -->
+
+</tr>
+<!-- End header row -->
+
+
+{% for row in rows %}
+<!-- Loop through every row of data -->
+
+<tr>
+<!-- Start one data row -->
+
+{% for cell in row %}
+<!-- Loop through every cell in the current row -->
+
+<td>{{ cell }}</td>
+<!-- Display the cell value -->
+
+{% endfor %}
+<!-- End cell loop -->
+
+</tr>
+<!-- End data row -->
+
+{% endfor %}
+<!-- End row loop -->
+
+
+</table>
+<!-- End data table -->
+
 
 </body>
+<!-- End document body -->
 
 </html>
+<!-- End HTML document -->
